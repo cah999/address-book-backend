@@ -1,0 +1,10 @@
+SQLAlchemy~=2.0.23
+fastapi~=0.105.0
+uvicorn~=0.25.0
+pytest~=7.4.4
+alembic~=1.13.1
+pydantic~=2.5.3
+bcrypt~=4.1.2
+python-dotenv~=1.0.0
+async-asgi-testclient~=1.4.11
+pydantic-settings~=2.1.0
