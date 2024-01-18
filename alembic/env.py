@@ -1,19 +1,23 @@
 import asyncio
 from logging.config import fileConfig
-from os import getenv
 
 from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from app.database import Base
+from database.database import Base
+
+from app.settings import settings
+from models.phones import Phones
+from models.users import Users
+from models.emails import Emails
 
 config = context.config
 config.set_main_option("sqlalchemy.url",
                        f"postgresql+asyncpg://"
-                       f"{getenv('DB_USER')}:{getenv('DB_PASSWORD')}@"
-                       f"{getenv('DB_HOST')}:{getenv('DB_PORT')}/{getenv('DB_NAME')}")
+                       f"{settings.DB_USER}:{settings.DB_PASSWORD}@"
+                       f"{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}")
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

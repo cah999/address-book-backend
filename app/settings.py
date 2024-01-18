@@ -1,8 +1,9 @@
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AppSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
+    # model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
 
     API_NAME: str = "Address Book API"
     API_VERSION: str = "1.0.0b"
@@ -14,4 +15,5 @@ class AppSettings(BaseSettings):
     DB_PASSWORD: str
 
 
+load_dotenv()
 settings = AppSettings()

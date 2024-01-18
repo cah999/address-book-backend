@@ -1,7 +1,6 @@
 import enum
-from uuid import UUID
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 
 class EmailType(enum.Enum):
@@ -10,9 +9,9 @@ class EmailType(enum.Enum):
 
 
 class EmailSchema(BaseModel):
-    user_id: UUID
+    user_id: int
     email_type: EmailType
-    email: EmailStr
+    email: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True

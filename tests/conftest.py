@@ -4,7 +4,7 @@ from typing import AsyncGenerator, Generator
 import pytest
 from async_asgi_testclient import TestClient
 
-from app.main import app
+from main import app
 
 
 @pytest.fixture

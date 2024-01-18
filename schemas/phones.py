@@ -1,6 +1,5 @@
 import enum
 import re
-from uuid import UUID
 
 from pydantic import BaseModel, field_validator
 
@@ -11,7 +10,7 @@ class PhoneType(enum.Enum):
 
 
 class PhoneSchema(BaseModel):
-    user_id: UUID
+    user_id: int
     phone_type: PhoneType
     phone: str
 
@@ -20,3 +19,6 @@ class PhoneSchema(BaseModel):
         if not re.match(r"^\+\d{11}$", v):
             raise ValueError("Указан неверный формат номера телефона. Пример: +79991234567")
         return v
+
+    class Config:
+        from_attributes = True
