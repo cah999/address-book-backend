@@ -11,15 +11,13 @@ class Gender(enum.Enum):
 
 
 class UserSchema(BaseModel):
-    full_name: str
+    fullName: str
     gender: Gender
-    birth_date: date
+    birthDate: date
     address: Optional[str]
 
-    @field_validator("full_name")
+    @field_validator("fullName")
     def full_name_validator(cls, value):
-        if not value.isalpha():
-            raise ValueError("Имя и фамилия должны состоять только из букв")
         if len(value.split()) != 3:
             raise ValueError("Имя, фамилия и отчество должны быть указаны")
         return value

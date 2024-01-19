@@ -1,19 +1,22 @@
-from typing import Optional, get_args
+import datetime
+from typing import Optional, List
 
-from sqlalchemy import Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.database import Base
 from schemas.users import Gender
+from models.phones import Phones
+from models.emails import Emails
 
 
 class Users(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    full_name: Mapped[str]
+    fullName: Mapped[str]
     gender: Mapped[Gender]
+    birthDate: Mapped[datetime.date]
     address: Mapped[Optional[str]]
 
-    phones = relationship("Phones", back_populates="user", cascade="all, delete")
-    emails = relationship("Emails", back_populates="user", cascade="all, delete")
+    phones: Mapped[List["Phones"]] = relationship("Phones", back_populates="user", cascade="all, delete")
+    emails: Mapped[List["Emails"]] = relationship("Emails", back_populates="user", cascade="all, delete")

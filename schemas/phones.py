@@ -10,8 +10,8 @@ class PhoneType(enum.Enum):
 
 
 class PhoneSchema(BaseModel):
-    user_id: int
-    phone_type: PhoneType
+    userId: int
+    phoneType: PhoneType
     phone: str
 
     @field_validator("phone")

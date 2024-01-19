@@ -9,8 +9,8 @@ class EmailType(enum.Enum):
 
 
 class EmailSchema(BaseModel):
-    user_id: int
-    email_type: EmailType
+    userId: int
+    emailType: EmailType
     email: str
 
     class Config:
