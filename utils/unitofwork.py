@@ -1,4 +1,7 @@
+import logging
 from abc import ABC, abstractmethod
+
+from fastapi import HTTPException, status
 
 from database.database import async_session_maker
 from repositories.users import UsersRepository
@@ -32,6 +35,7 @@ class UnitOfWork(IUnitOfWork):
 
     def __init__(self):
         self.session_factory = async_session_maker
+        self.logger = logging.getLogger(__name__)
 
     async def __aenter__(self):
         self.session = self.session_factory()
