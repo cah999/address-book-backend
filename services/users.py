@@ -40,7 +40,7 @@ class UsersService:
         async with uow:
             res = await uow.users.update_one(user_id, user_data.model_dump(), id=user_id)
             if res is None:
-                self.logger.error(f"User with id: {user_id} not found")
+                self.logger.info(f"User with id: {user_id} not found")
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id = {user_id} not found")
             await uow.commit()
         self.logger.info(f"User with id: {user_id} updated")
@@ -54,7 +54,7 @@ class UsersService:
         async with uow:
             user = await uow.users.update_one(user_id, user_dict, id=user_id)
             if user is None:
-                self.logger.error(f"User with id: {user_id} not found")
+                self.logger.info(f"User with id: {user_id} not found")
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id = {user_id} not found")
             await uow.commit()
         self.logger.info(f"User with id: {user_id} updated")
@@ -65,7 +65,7 @@ class UsersService:
         async with uow:
             res = await uow.users.delete_one(user_id)
             if res is None:
-                self.logger.error(f"User with id: {user_id} not found")
+                self.logger.info(f"User with id: {user_id} not found")
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id = {user_id} not found")
             await uow.commit()
         self.logger.info(f"User with id: {user_id} deleted")

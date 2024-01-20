@@ -51,7 +51,7 @@ class EmailsService:
         async with uow:
             res = await uow.emails.delete_one(email_id)
             if res is None:
-                self.logger.error(f"Email with id: {email_id} not found")
+                self.logger.info(f"Email with id: {email_id} not found")
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                     detail=f"Email with id = {email_id} not found")
             await uow.commit()

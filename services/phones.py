@@ -51,7 +51,7 @@ class PhonesService:
         async with uow:
             res = await uow.phones.delete_one(phone_id)
             if res is None:
-                self.logger.error(f"Phone with id: {phone_id} not found")
+                self.logger.info(f"Phone with id: {phone_id} not found")
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                     detail=f"Phone with id = {phone_id} not found")
             await uow.commit()

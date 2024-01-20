@@ -1,7 +1,8 @@
 import enum
+import re
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 
 class EmailType(enum.Enum):
@@ -10,9 +11,14 @@ class EmailType(enum.Enum):
 
 
 class EmailAddSchema(BaseModel):
-    # todo validate
     emailType: EmailType
     email: str
+
+    @field_validator("email")
+    def email_validator(cls, email):
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
+            raise ValueError("Email is not valid")
+        return email
 
 
 class EmailSchema(EmailAddSchema):
