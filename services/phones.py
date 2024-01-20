@@ -3,6 +3,7 @@ import logging
 from fastapi import HTTPException, status
 
 from schemas.phones import PhoneAddSchema, PhoneOptionalSchema, PhoneSchema
+from schemas.users import UserInfoSchema
 from utils.unitofwork import IUnitOfWork
 
 
@@ -13,6 +14,10 @@ class PhonesService:
     async def get_user_phones(self, user_id: int, uow: IUnitOfWork) -> list[PhoneSchema]:
         self.logger.info(f"Getting phones for user with id: {user_id}")
         async with uow:
+            user = await uow.users.find_one(user_id, schema=UserInfoSchema)
+            if user is None:
+                self.logger.info(f"User with id: {user_id} not found")
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id = {user_id} not found")
             phones = await uow.phones.find_all(schema=PhoneSchema, userId=user_id)
         self.logger.info(f"Phones for user with id: {user_id} successfully received")
         return [PhoneSchema.model_validate(phone) for phone in phones]
@@ -22,6 +27,10 @@ class PhonesService:
         phone_dict = phone_data.model_dump()
         phone_dict["userId"] = user_id
         async with uow:
+            user = await uow.users.find_one(user_id, schema=UserInfoSchema)
+            if user is None:
+                self.logger.info(f"User with id: {user_id} not found")
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id = {user_id} not found")
             phone_id = await uow.phones.add_one(phone_dict)
             await uow.commit()
         self.logger.info(f"Phone added for user with id: {user_id}")
