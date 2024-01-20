@@ -40,3 +40,9 @@ VALUES ('1', 'мобильный', '+79123456789'),
 
 SELECT setval('users_id_seq', MAX(id))
 FROM users;
+
+SELECT setval('emails_id_seq', MAX(id))
+FROM emails;
+
+SELECT setval('phones_id_seq', MAX(id))
+FROM phones;

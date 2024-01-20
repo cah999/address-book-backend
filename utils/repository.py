@@ -46,8 +46,8 @@ class SQLAlchemyRepository(AbstractRepository):
         res = await self.session.execute(stmt)
         return res.scalar_one_or_none()
 
-    async def find_all(self, schema: Type[BaseModel]):
-        stmt = select(self.model)
+    async def find_all(self, schema: Type[BaseModel], **filter_by):
+        stmt = select(self.model).filter_by(**filter_by)
         res = await self.session.execute(stmt)
         res = [schema.model_validate(row[0]) for row in res.all()]
         return res

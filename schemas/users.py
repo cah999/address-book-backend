@@ -4,6 +4,9 @@ from typing import Optional
 
 from pydantic import BaseModel, field_validator
 
+from schemas.emails import EmailInfoSchema
+from schemas.phones import PhoneInfoSchema
+
 
 class Gender(enum.Enum):
     male = "мужской"
@@ -46,6 +49,11 @@ class UserInfoSchema(UserSchema):
 
     class Config:
         from_attributes = True
+
+
+class UserFullSchema(UserInfoSchema):
+    phones: list[PhoneInfoSchema]
+    emails: list[EmailInfoSchema]
 
 
 class UserOptionalSchema(UserSchema):

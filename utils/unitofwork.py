@@ -4,11 +4,15 @@ from abc import ABC, abstractmethod
 from fastapi import HTTPException, status
 
 from database.database import async_session_maker
+from repositories.emails import EmailsRepository
+from repositories.phones import PhonesRepository
 from repositories.users import UsersRepository
 
 
 class IUnitOfWork(ABC):
     users: UsersRepository
+    phones: PhonesRepository
+    emails: EmailsRepository
 
     @abstractmethod
     def __init__(self):
@@ -41,6 +45,8 @@ class UnitOfWork(IUnitOfWork):
         self.session = self.session_factory()
 
         self.users = UsersRepository(self.session)
+        self.phones = PhonesRepository(self.session)
+        self.emails = EmailsRepository(self.session)
 
     async def __aexit__(self, *args):
         await self.rollback()

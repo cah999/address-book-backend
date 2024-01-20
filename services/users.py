@@ -2,7 +2,9 @@ import logging
 
 from fastapi import HTTPException
 
-from schemas.users import UserSchema, UserOptionalSchema, UserInfoSchema
+from schemas.emails import EmailInfoSchema
+from schemas.phones import PhoneInfoSchema
+from schemas.users import UserSchema, UserOptionalSchema, UserInfoSchema, UserFullSchema
 from fastapi import status
 from utils.unitofwork import IUnitOfWork
 
@@ -15,12 +17,15 @@ class UsersService:
         async with uow:
             return await uow.users.find_all(UserInfoSchema)
 
-    async def get_user(self, user_id: int, uow: IUnitOfWork) -> UserInfoSchema:
+    async def get_user(self, user_id: int, uow: IUnitOfWork) -> UserFullSchema:
         async with uow:
             user = await uow.users.find_one(user_id, UserInfoSchema)
+            user_dict = user.model_dump()
+            user_dict["phones"] = await uow.phones.find_all(PhoneInfoSchema, userId=user_id)
+            user_dict["emails"] = await uow.emails.find_all(EmailInfoSchema, userId=user_id)
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id = {user_id} not found")
-        return user
+        return UserFullSchema.model_validate(user_dict)
 
     async def create_user(self, user_data: UserSchema, uow: IUnitOfWork) -> int:
         self.logger.info(f"Creating user with data: {user_data}")

@@ -8,6 +8,7 @@ from schemas.phones import PhoneType
 class Phones(Base):
     __tablename__ = "phones"
 
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     userId: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     phoneType: Mapped[PhoneType]
     phone: Mapped[str] = mapped_column(String(12))
