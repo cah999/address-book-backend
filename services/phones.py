@@ -7,17 +7,22 @@ from schemas.users import UserInfoSchema
 from utils.unitofwork import IUnitOfWork
 
 
+# todo abstract service and base service a to on dubliruyt vse drug druga
+# test depends
+# add docker pls)
 class PhonesService:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
+    async def get_phone(self, phone_id: int, uow: IUnitOfWork) -> PhoneSchema:
+        self.logger.info(f"Getting phone with id: {phone_id}")
+        async with uow:
+            phone = await uow.phones.find_one(phone_id, schema=PhoneSchema)
+        return phone
+
     async def get_user_phones(self, user_id: int, uow: IUnitOfWork) -> list[PhoneSchema]:
         self.logger.info(f"Getting phones for user with id: {user_id}")
         async with uow:
-            user = await uow.users.find_one(user_id, schema=UserInfoSchema)
-            if user is None:
-                self.logger.info(f"User with id: {user_id} not found")
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id = {user_id} not found")
             phones = await uow.phones.find_all(schema=PhoneSchema, userId=user_id)
         self.logger.info(f"Phones for user with id: {user_id} successfully received")
         return [PhoneSchema.model_validate(phone) for phone in phones]
@@ -27,10 +32,7 @@ class PhonesService:
         phone_dict = phone_data.model_dump()
         phone_dict["userId"] = user_id
         async with uow:
-            user = await uow.users.find_one(user_id, schema=UserInfoSchema)
-            if user is None:
-                self.logger.info(f"User with id: {user_id} not found")
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id = {user_id} not found")
+            await uow.users.find_one(user_id, schema=UserInfoSchema)
             phone_id = await uow.phones.add_one(phone_dict)
             await uow.commit()
         self.logger.info(f"Phone added for user with id: {user_id}")
@@ -58,11 +60,7 @@ class PhonesService:
     async def delete_phone(self, phone_id: int, uow: IUnitOfWork) -> bool:
         self.logger.info(f"Deleting phone with id: {phone_id}")
         async with uow:
-            res = await uow.phones.delete_one(phone_id)
-            if res is None:
-                self.logger.info(f"Phone with id: {phone_id} not found")
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                                    detail=f"Phone with id = {phone_id} not found")
+            await uow.phones.delete_one(phone_id)
             await uow.commit()
         self.logger.info(f"Phone with id: {phone_id} deleted")
         return True
