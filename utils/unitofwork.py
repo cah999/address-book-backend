@@ -1,8 +1,6 @@
 import logging
 from abc import ABC, abstractmethod
 
-from fastapi import HTTPException, status
-
 from database.database import async_session_maker
 from repositories.emails import EmailsRepository
 from repositories.phones import PhonesRepository

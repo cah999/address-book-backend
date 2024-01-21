@@ -4,9 +4,9 @@ from typing import Optional, List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.database import Base
-from schemas.users import Gender
-from models.phones import Phones
 from models.emails import Emails
+from models.phones import Phones
+from schemas.users import Gender
 
 
 class Users(Base):

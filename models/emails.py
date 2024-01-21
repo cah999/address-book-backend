@@ -1,6 +1,4 @@
-from typing import get_args
-
-from sqlalchemy import ForeignKey, UUID, Enum
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.database import Base

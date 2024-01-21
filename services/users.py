@@ -14,14 +14,17 @@ class UsersService:
         self.logger = logging.getLogger(__name__)
 
     async def get_users(self, uow: IUnitOfWork) -> list[UserInfoSchema]:
+        self.logger.info("Getting all users")
         async with uow:
             return await uow.users.find_all(UserInfoSchema)
 
     async def get_user(self, user_id: int, uow: IUnitOfWork) -> bool:
+        self.logger.info(f"Getting user with id: {user_id}")
         async with uow:
             return await uow.users.find_one(user_id, UserInfoSchema)
 
     async def get_full_user(self, user: UserInfoSchema, uow: IUnitOfWork) -> UserFullSchema:
+        self.logger.info(f"Getting full user with id: {user.id}")
         async with uow:
             user_dict = user.model_dump()
             user_dict["phones"] = await uow.phones.find_all(PhoneInfoSchema, userId=user.id)

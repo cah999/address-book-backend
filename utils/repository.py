@@ -1,11 +1,10 @@
-import logging
 from abc import abstractmethod, ABC
+from typing import Type
 
+from pydantic import BaseModel
 from sqlalchemy import insert, select, update, delete
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Type
-from pydantic import BaseModel
 
 
 class AbstractRepository(ABC):

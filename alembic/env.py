@@ -6,9 +6,8 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from database.database import Base
-
 from app.settings import settings
+from database.database import Base
 from models.phones import Phones
 from models.users import Users
 from models.emails import Emails

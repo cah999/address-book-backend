@@ -3,13 +3,9 @@ import logging
 from fastapi import HTTPException, status
 
 from schemas.phones import PhoneAddSchema, PhoneOptionalSchema, PhoneSchema
-from schemas.users import UserInfoSchema
 from utils.unitofwork import IUnitOfWork
 
 
-# todo abstract service and base service a to on dubliruyt vse drug druga
-# test depends
-# add docker pls)
 class PhonesService:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
@@ -28,11 +24,10 @@ class PhonesService:
         return [PhoneSchema.model_validate(phone) for phone in phones]
 
     async def add_phone(self, user_id: int, phone_data: PhoneAddSchema, uow: IUnitOfWork) -> int:
-        self.logger.info(f"Adding phone for user with id: {user_id}")
         phone_dict = phone_data.model_dump()
         phone_dict["userId"] = user_id
+        self.logger.info(f"Adding phone for user with id: {user_id}")
         async with uow:
-            await uow.users.find_one(user_id, schema=UserInfoSchema)
             phone_id = await uow.phones.add_one(phone_dict)
             await uow.commit()
         self.logger.info(f"Phone added for user with id: {user_id}")
