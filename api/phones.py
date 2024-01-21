@@ -15,31 +15,31 @@ router = APIRouter(
 
 
 @router.get("/{user_id}")
-async def get_user_phones(user: Annotated[UserFullSchema, Depends(validate_user)], uow: UOWDependency):
-    return await PhonesService().get_user_phones(user.id, uow)
+async def get_user_phones(user: Annotated[UserFullSchema, Depends(validate_user)], session: UOWDependency):
+    return await PhonesService().get_user_phones(user.id, session)
 
 
 @router.post("/{user_id}/new")
 async def add_phone(user: Annotated[UserFullSchema, Depends(validate_user)], phone_data: PhoneAddSchema,
-                    uow: UOWDependency):
-    return await PhonesService().add_phone(user.id, phone_data, uow)
+                    session: UOWDependency):
+    return await PhonesService().add_phone(user.id, phone_data, session)
 
 
 @router.put("/{phone_id}")
 async def update_phone(phone: Annotated[PhoneSchema, Depends(validate_phone)], phone_data: PhoneAddSchema,
-                       uow: UOWDependency):
-    await PhonesService().update_phone(phone.id, phone_data, uow)
+                       session: UOWDependency):
+    await PhonesService().update_phone(phone.id, phone_data, session)
     return JSONResponse(status_code=status.HTTP_200_OK, content={"detail": "Phone successfully updated"})
 
 
 @router.patch("/{phone_id}")
 async def patch_phone(phone: Annotated[PhoneSchema, Depends(validate_phone)], phone_data: PhoneOptionalSchema,
-                      uow: UOWDependency):
-    await PhonesService().patch_phone(phone.id, phone_data, uow)
+                      session: UOWDependency):
+    await PhonesService().patch_phone(phone.id, phone_data, session)
     return JSONResponse(status_code=status.HTTP_200_OK, content={"detail": "Phone successfully patched"})
 
 
 @router.delete("/{phone_id}")
-async def delete_phone(phone: Annotated[PhoneSchema, Depends(validate_phone)], uow: UOWDependency):
-    await PhonesService().delete_phone(phone.id, uow)
+async def delete_phone(phone: Annotated[PhoneSchema, Depends(validate_phone)], session: UOWDependency):
+    await PhonesService().delete_phone(phone.id, session)
     return JSONResponse(status_code=status.HTTP_200_OK, content={"detail": "Phone successfully deleted"})
