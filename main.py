@@ -15,6 +15,3 @@ routers = [users_router, phones_router, emails_router]
 
 for router in routers:
     app.include_router(router, prefix=settings.API_PREFIX)
-
-if __name__ == "__main__":
-    uvicorn.run(app="main:app", port=8000, reload=True, log_config="logging.yaml")
